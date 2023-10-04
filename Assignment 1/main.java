@@ -17,12 +17,16 @@ public class Main {
             System.out.println(palindromes[i]);
         }
 
-        String[] selectionSortedArray = selectionSort(magicItemsArray);
+        // String[] selectionSortedArray = selectionSort(magicItemsArray);
+        int selectionSortComparisons = selectionSort(magicItemsArray);
+        System.out.println(selectionSortComparisons);
 
-        // Prints out sorted array
-        for (int i = 0; i < selectionSortedArray.length; i++) {
-            System.out.println(selectionSortedArray[i]);
-        }
+        /*
+         * Prints out sorted array
+         * for (int i = 0; i < selectionSortedArray.length; i++) {
+         * System.out.println(selectionSortedArray[i]);
+         * }
+         */
     }
 
     public static String[] fileToArray(File file) throws FileNotFoundException {
@@ -90,19 +94,21 @@ public class Main {
         return palindromes;
     }
 
-    public static String[] selectionSort(String[] arr) {
+    public static int selectionSort(String[] arr) {
         String[] selectionSortedArray = arr;
+        int comparisons = 0;
         for (int i = 0; i < selectionSortedArray.length - 1; i++) {
             int small = i;
             for (int j = i + 1; j < selectionSortedArray.length; j++) {
                 if (selectionSortedArray[j].compareTo(selectionSortedArray[small]) < 0) {
                     small = j;
                 }
+                comparisons++;
             }
             String temp = selectionSortedArray[i];
             selectionSortedArray[i] = selectionSortedArray[small];
             selectionSortedArray[small] = temp;
         }
-        return selectionSortedArray;
+        return comparisons;
     }
 }
