@@ -22,7 +22,11 @@ public class Main {
         int selectionSortComparisons = selectionSort(magicItemsArray);
         System.out.println(selectionSortComparisons);
         shuffle(magicItemsArray);
-
+        int insertionSortComparisons = insertionSort(magicItemsArray);
+        for (int i = 0; i < magicItemsArray.length; i++) {
+         System.out.println(magicItemsArray[i]);
+          }
+        //System.out.println(insertionSortComparisons);
 
         /*
          * Prints out sorted array
@@ -99,9 +103,9 @@ public class Main {
 
     public static final Random gen = new Random();
 
-    public static void shuffle(String[] arr){
+    public static void shuffle(String[] arr) {
         int n = arr.length;
-        while (n>1){
+        while (n > 1) {
             int r = gen.nextInt(n--);
             String temp = arr[n];
             arr[n] = arr[r];
@@ -111,20 +115,34 @@ public class Main {
     }
 
     public static int selectionSort(String[] arr) {
-        String[] selectionSortedArray = arr;
         int comparisons = 0;
-        for (int i = 0; i < selectionSortedArray.length - 1; i++) {
+        for (int i = 0; i < arr.length - 1; i++) {
             int small = i;
-            for (int j = i + 1; j < selectionSortedArray.length; j++) {
-                if (selectionSortedArray[j].compareTo(selectionSortedArray[small]) < 0) {
+            for (int j = i + 1; j < arr.length; j++) {
+                if (arr[j].compareTo(arr[small]) < 0) {
                     small = j;
                 }
                 comparisons++;
             }
-            String temp = selectionSortedArray[i];
-            selectionSortedArray[i] = selectionSortedArray[small];
-            selectionSortedArray[small] = temp;
+            String temp = arr[i];
+            arr[i] = arr[small];
+            arr[small] = temp;
         }
         return comparisons;
+    }
+
+    public static int insertionSort(String[] arr){
+        int insertionSortComparisons = 0;
+        for (int i=1; i<arr.length; i++){
+            String val = arr[i];
+            int j = i - 1;
+            while (j >= 0 && arr[j].compareTo(val) < 0){
+                arr[j + 1] = arr[j];
+                j = j--;
+                insertionSortComparisons++;
+            }
+            arr[j + 1] = val;
+        }
+        return insertionSortComparisons;
     }
 }
