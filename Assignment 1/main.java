@@ -4,6 +4,7 @@ import java.util.Queue;
 import java.util.LinkedList;
 import java.util.Scanner;
 import java.util.Stack;
+import java.util.Random;
 
 public class Main {
 
@@ -20,6 +21,8 @@ public class Main {
         // String[] selectionSortedArray = selectionSort(magicItemsArray);
         int selectionSortComparisons = selectionSort(magicItemsArray);
         System.out.println(selectionSortComparisons);
+        shuffle(magicItemsArray);
+
 
         /*
          * Prints out sorted array
@@ -92,6 +95,19 @@ public class Main {
             }
         }
         return palindromes;
+    }
+
+    public static final Random gen = new Random();
+
+    public static void shuffle(String[] arr){
+        int n = arr.length;
+        while (n>1){
+            int r = gen.nextInt(n--);
+            String temp = arr[n];
+            arr[n] = arr[r];
+            arr[r] = temp;
+        }
+
     }
 
     public static int selectionSort(String[] arr) {
