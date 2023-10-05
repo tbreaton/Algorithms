@@ -18,22 +18,20 @@ public class Main {
             System.out.println(palindromes[i]);
         }
 
-        // String[] selectionSortedArray = selectionSort(magicItemsArray);
+        shuffle(magicItemsArray);
         int selectionSortComparisons = selectionSort(magicItemsArray);
-        System.out.println(selectionSortComparisons);
+        System.out.println("Selection Sort Comparisons: " + selectionSortComparisons);
         shuffle(magicItemsArray);
         int insertionSortComparisons = insertionSort(magicItemsArray);
-        for (int i = 0; i < magicItemsArray.length; i++) {
-         System.out.println(magicItemsArray[i]);
-          }
-        //System.out.println(insertionSortComparisons);
+        System.out.println("Insertion Sort Comparisons: " + insertionSortComparisons);
+        shuffle(magicItemsArray);
+        int mergeSortComparisons = mergeSort(magicItemsArray, 0, magicItemsArray.length - 1, 0);
+        System.out.println("Merge Sort Comparisons: " + mergeSortComparisons);
 
-        /*
-         * Prints out sorted array
-         * for (int i = 0; i < selectionSortedArray.length; i++) {
-         * System.out.println(selectionSortedArray[i]);
-         * }
-         */
+        //Prints out the sorted magicItemsArry
+        /*for (int i = 0; i < magicItemsArray.length; i++) {
+         System.out.println(magicItemsArray[i]);
+        }*/
     }
 
     public static String[] fileToArray(File file) throws FileNotFoundException {
@@ -132,17 +130,68 @@ public class Main {
     }
 
     public static int insertionSort(String[] arr){
-        int insertionSortComparisons = 0;
-        for (int i=1; i<arr.length; i++){
-            String val = arr[i];
-            int j = i - 1;
-            while (j >= 0 && arr[j].compareTo(val) < 0){
-                arr[j + 1] = arr[j];
-                j = j--;
-                insertionSortComparisons++;
+        int comparisons = 0;
+        String temp = "";
+        for (int i=0; i<arr.length; i++){
+            for (int j=i+1; j<arr.length; j++){
+                if (arr[i].compareTo(arr[j]) > 0){
+                    temp = arr[i];
+                    arr[i] = arr[j];
+                    arr[j] = temp;
+                    comparisons++;
+                }
+                
             }
-            arr[j + 1] = val;
         }
-        return insertionSortComparisons;
+        return comparisons;
+    }
+
+    public static int mergeSort(String[] arr, int from, int to, int comparisons){
+        if (from == to){
+            return comparisons;
+        }
+        int mid = (from + to) / 2;
+        mergeSort(arr, from, mid, comparisons);
+        mergeSort(arr, mid+1, to, comparisons);
+        comparisons = merge(arr, from, mid, to, comparisons);
+        return comparisons;
+    }
+
+    public static int merge(String[] arr, int from, int mid, int to, int comparisons){
+        int n = to - from + 1;
+        String[] tempArr = new String[n];
+        int i1 = from;
+        int i2 = mid + 1;
+        int j = 0;
+
+        while (i1 <= mid && i2 <= to){
+            if (arr[i1].compareTo(arr[i2]) < 0){
+                tempArr[j] = arr[i1];
+                i1++;
+                comparisons++;
+            }else{
+                tempArr[j] = arr[i2];
+                i2++;
+                comparisons++;
+            }
+            j++;
+        }
+
+        while (i1 <= mid){
+            tempArr[j] = arr[i1];
+            i1++;
+            j++;
+        }
+
+        while (i2 <= to){
+            tempArr[j] = arr[i2];
+            i2++;
+            j++;
+        }
+
+        for (j = 0; j<n; j++){
+            arr[from + j] = tempArr[j];
+        }
+        return comparisons;
     }
 }
