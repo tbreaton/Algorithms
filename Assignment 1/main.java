@@ -18,22 +18,32 @@ public class Main {
             System.out.println(palindromes[i]);
         }
 
+        // Shuffles and implement selection sort
         shuffle(magicItemsArray);
         int selectionSortComparisons = selectionSort(magicItemsArray);
         System.out.println("Selection Sort Comparisons: " + selectionSortComparisons);
+
+        // Shuffles and implement insertion sort
         shuffle(magicItemsArray);
         int insertionSortComparisons = insertionSort(magicItemsArray);
         System.out.println("Insertion Sort Comparisons: " + insertionSortComparisons);
+
+        // Shuffles and implement merge sort
         shuffle(magicItemsArray);
         int mergeSortComparisons = mergeSort(magicItemsArray, 0, magicItemsArray.length - 1, 0);
         System.out.println("Merge Sort Comparisons: " + mergeSortComparisons);
+
+        // Shuffles and implement quick sort
         shuffle(magicItemsArray);
-        quickSort(magicItemsArray, 0, magicItemsArray.length - 1);
+        int quickSortComparisons = quickSort(magicItemsArray, 0, magicItemsArray.length - 1, 0);
+        System.out.println("Quick Sort Comparisons: " + quickSortComparisons);
 
         // Prints out the sorted magicItemsArry
-        for (int i = 0; i < magicItemsArray.length; i++) {
-            System.out.println(magicItemsArray[i]);
-        }
+        /*
+         * for (int i = 0; i < magicItemsArray.length; i++) {
+         * System.out.println(magicItemsArray[i]);
+         * }
+         */
     }
 
     public static String[] fileToArray(File file) throws FileNotFoundException {
@@ -75,9 +85,9 @@ public class Main {
                     stack.push(temp);
                 }
             }
-            int queueLength = queue.size();
+
             // Loops through the queue and stack chcecking if the string is a palindrome
-            for (int k = 0; k < queueLength; k++) {
+            for (int k = 0; k < queue.size(); k++) {
                 String tempForQueue = queue.poll();
                 String tempForStack = stack.pop();
                 if (tempForQueue.compareTo(tempForStack) == 0) {
@@ -92,6 +102,7 @@ public class Main {
                     break;
                 }
             }
+
             // Adds the palindromes to an array that is returned to the main function
             if (isPalindrome) {
                 palindromes[palindromesCounter] = arr[i];
@@ -103,6 +114,7 @@ public class Main {
 
     public static final Random gen = new Random();
 
+    // Implements a shuffle based off of Knuth shuffle
     public static void shuffle(String[] arr) {
         int n = arr.length;
         while (n > 1) {
@@ -116,15 +128,22 @@ public class Main {
 
     public static int selectionSort(String[] arr) {
         int comparisons = 0;
+        String temp = "";
+
+        // Loops through the array for each position in the array
         for (int i = 0; i < arr.length - 1; i++) {
             int small = i;
             for (int j = i + 1; j < arr.length; j++) {
+                // Compares each value of the array to the previous value and swaps
+                // them if a smaller value is found
                 if (arr[j].compareTo(arr[small]) < 0) {
                     small = j;
                 }
                 comparisons++;
             }
-            String temp = arr[i];
+
+            // Swaps the positions of the current value and smallest value
+            temp = arr[i];
             arr[i] = arr[small];
             arr[small] = temp;
         }
@@ -134,15 +153,19 @@ public class Main {
     public static int insertionSort(String[] arr) {
         int comparisons = 0;
         String temp = "";
+
+        // Loops through the array for each position in the array
         for (int i = 0; i < arr.length; i++) {
             for (int j = i + 1; j < arr.length; j++) {
+                // Compares the value of the previous position to the next position and swaps
+                // them
+                // if a smaller value is found
                 if (arr[i].compareTo(arr[j]) > 0) {
                     temp = arr[i];
                     arr[i] = arr[j];
                     arr[j] = temp;
                     comparisons++;
                 }
-
             }
         }
         return comparisons;
@@ -152,9 +175,16 @@ public class Main {
         if (from == to) {
             return comparisons;
         }
+
+        // Gathers the midpoint to break the array into two halves
         int mid = (from + to) / 2;
+
+        // Reccursively calls the mergeSort function until the array is broken into
+        // individual pieces
         mergeSort(arr, from, mid, comparisons);
         mergeSort(arr, mid + 1, to, comparisons);
+
+        // Calls the merge function to combine the individual pieces to one array
         comparisons = merge(arr, from, mid, to, comparisons);
         return comparisons;
     }
@@ -166,6 +196,8 @@ public class Main {
         int i2 = mid + 1;
         int j = 0;
 
+        // While merging the pieces of the array, each piece is compared to the other
+        // and sorted
         while (i1 <= mid && i2 <= to) {
             if (arr[i1].compareTo(arr[i2]) < 0) {
                 tempArr[j] = arr[i1];
@@ -183,49 +215,63 @@ public class Main {
             tempArr[j] = arr[i1];
             i1++;
             j++;
+            comparisons++;
         }
 
         while (i2 <= to) {
             tempArr[j] = arr[i2];
             i2++;
             j++;
+            comparisons++;
         }
 
         for (j = 0; j < n; j++) {
             arr[from + j] = tempArr[j];
+            comparisons++;
         }
         return comparisons;
     }
 
-    public static void quickSort(String[] arr, int lower, int higher) {
+    public static int quickSort(String[] arr, int lower, int higher, int comparisons) {
         int i = lower;
         int j = higher;
         String pivot = arr[i + (j - i) / 2];
         String temp = "";
 
         while (i <= j) {
+
             while (arr[i].compareTo(pivot) < 0) {
                 i++;
+                comparisons++;
             }
 
             while (arr[j].compareTo(pivot) > 0) {
                 j--;
+                comparisons++;
             }
 
+            // If the lower index is still less than the higher index, then the values of
+            // said
+            // indexes are swapped
             if (i <= j) {
                 temp = arr[i];
                 arr[i] = arr[j];
                 arr[j] = temp;
                 i++;
                 j--;
+                comparisons++;
             }
 
+            // Calls the quickSort function recursivley
             if (lower < j) {
-                quickSort(arr, lower, j);
+                comparisons++;
+                quickSort(arr, lower, j, comparisons);
             }
             if (i < higher) {
-                quickSort(arr, i, higher);
+                comparisons++;
+                quickSort(arr, i, higher, comparisons);
             }
         }
+        return comparisons;
     }
 }
