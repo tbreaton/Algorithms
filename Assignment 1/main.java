@@ -38,7 +38,7 @@ public class Main {
         int quickSortComparisons = quickSort(magicItemsArray, 0, magicItemsArray.length - 1, 0);
         System.out.println("Quick Sort Comparisons: " + quickSortComparisons);
 
-        // Prints out the sorted magicItemsArry
+        // Prints out the sorted magicItemsArray
         /*
          * for (int i = 0; i < magicItemsArray.length; i++) {
          * System.out.println(magicItemsArray[i]);
