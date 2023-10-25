@@ -10,10 +10,12 @@ public class Main2 {
         String[] magicItemsArray = fileToArray(magicItemsFile);
         String[] randomItems = randomItems(magicItemsArray);
         quickSort(magicItemsArray, 0, magicItemsArray.length - 1);
+        int[] linearSearchComparisons = linearSearch(magicItemsArray, randomItems);
 
-        // Prints out magicItemsArray to double check sorting works
-        for (int i = 0; i < magicItemsArray.length; i++) {
-            System.out.println(magicItemsArray[i]);
+        // Prints out linearSearchComparisons to make sure the search algorithm
+        // is working correctly
+        for (int i = 0; i < linearSearchComparisons.length; i++) {
+            System.out.println(linearSearchComparisons[i]);
         }
     }
 
@@ -98,5 +100,38 @@ public class Main2 {
                 quickSort(arr, i, higher);
             }
         }
+    }
+
+    public static int[] linearSearch(String[] arr, String[] items) {
+        // Keeps track of the number of comparisons for each
+        int[] numComparisons = new int[42];
+
+        // Loops through the magicItemsArray for each of the
+        // randomly selected items
+        for (int i = 0; i < items.length; i++) {
+            int comparisons = 0;
+            for (int k = 0; k < arr.length; k++) {
+                comparisons++;
+                if (arr[k].compareTo(items[i]) == 0) {
+                    // Adds number of comparisons to the Array for each iteration
+                    numComparisons[i] = comparisons;
+                    break;
+                }
+            }
+        }
+        return numComparisons;
+
+        /*
+         * // Loops through array and adds up the total number of iterations
+         * int sum = 0;
+         * for (int i=0; i<numComparisons.length; i++){
+         * sum = sum + numComparisons[i];
+         * }
+         * 
+         * // Takes the average of the number of comparisons for all 42 items
+         * int avg = sum/42;
+         * 
+         * return avg;
+         */
     }
 }
