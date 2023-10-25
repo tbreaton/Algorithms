@@ -10,13 +10,16 @@ public class Main2 {
         String[] magicItemsArray = fileToArray(magicItemsFile);
         String[] randomItems = randomItems(magicItemsArray);
         quickSort(magicItemsArray, 0, magicItemsArray.length - 1);
-        int[] linearSearchComparisons = linearSearch(magicItemsArray, randomItems);
+        int linearSeachComparisons = linearSearch(magicItemsArray, randomItems);
+        System.out.println(linearSeachComparisons);
 
-        // Prints out linearSearchComparisons to make sure the search algorithm
-        // is working correctly
-        for (int i = 0; i < linearSearchComparisons.length; i++) {
-            System.out.println(linearSearchComparisons[i]);
-        }
+        /*
+         * // Prints out linearSearchComparisons to make sure the search algorithm
+         * // is working correctly
+         * for (int i = 0; i < linearSearchComparisons.length; i++) {
+         * System.out.println(linearSearchComparisons[i]);
+         * }
+         */
     }
 
     public static String[] fileToArray(File file) throws FileNotFoundException {
@@ -102,7 +105,7 @@ public class Main2 {
         }
     }
 
-    public static int[] linearSearch(String[] arr, String[] items) {
+    public static int linearSearch(String[] arr, String[] items) {
         // Keeps track of the number of comparisons for each
         int[] numComparisons = new int[42];
 
@@ -119,19 +122,16 @@ public class Main2 {
                 }
             }
         }
-        return numComparisons;
 
-        /*
-         * // Loops through array and adds up the total number of iterations
-         * int sum = 0;
-         * for (int i=0; i<numComparisons.length; i++){
-         * sum = sum + numComparisons[i];
-         * }
-         * 
-         * // Takes the average of the number of comparisons for all 42 items
-         * int avg = sum/42;
-         * 
-         * return avg;
-         */
+        // Loops through array and adds up the total number of iterations
+        int sum = 0;
+        for (int i = 0; i < numComparisons.length; i++) {
+            sum = sum + numComparisons[i];
+        }
+
+        // Takes the average of the number of comparisons for all 42 items
+        int avg = sum / 42;
+
+        return avg;
     }
 }
