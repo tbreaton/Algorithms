@@ -140,11 +140,15 @@ public class Main2 {
     public static int binarySearch(String[] arr, String[] items) {
         int[] numComparisons = new int[42];
 
+        // Loops through every randomItem and counts how many comparisons
+        // are needed to find each item during binary search
         for (int i = 0; i < items.length; i++) {
             int comparisons = 0;
             int high = arr.length - 1;
             int low = 0;
 
+            // Loops through the magicItems array and changes the upper and/or lower
+            // bound of the search until the item is found
             while (high >= low) {
                 int arrItem = (low + high) / 2;
                 if (arr[arrItem].compareTo(items[i]) > 0) {
@@ -154,12 +158,15 @@ public class Main2 {
                     low = arrItem + 1;
                     comparisons++;
                 } else {
+                    // Adds the total number of comparisons to an array
                     numComparisons[i] = comparisons;
                     break;
                 }
             }
         }
 
+        // Takes all of the total comparisons and finds and returns the average of all
+        // 42 searches
         int sum = 0;
         for (int i = 0; i < numComparisons.length; i++) {
             sum = sum + numComparisons[i];
