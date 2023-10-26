@@ -12,12 +12,14 @@ public class Main2 {
         quickSort(magicItemsArray, 0, magicItemsArray.length - 1);
         int linearSeachComparisons = linearSearch(magicItemsArray, randomItems);
         System.out.println(linearSeachComparisons);
+        int binarySearchComparisons = binarySearch(magicItemsArray, randomItems);
+        System.out.println(binarySearchComparisons);
 
         /*
-         * // Prints out linearSearchComparisons to make sure the search algorithm
-         * // is working correctly
-         * for (int i = 0; i < linearSearchComparisons.length; i++) {
-         * System.out.println(linearSearchComparisons[i]);
+         * Prints out binarySearchComparisons to make sure the search algorithm
+         * is working correctly
+         * for (int i = 0; i < binarySearchComparisons.length; i++) {
+         * System.out.println(binarySearchComparisons[i]);
          * }
          */
     }
@@ -130,6 +132,39 @@ public class Main2 {
         }
 
         // Takes the average of the number of comparisons for all 42 items
+        int avg = sum / 42;
+
+        return avg;
+    }
+
+    public static int binarySearch(String[] arr, String[] items) {
+        int[] numComparisons = new int[42];
+
+        for (int i = 0; i < items.length; i++) {
+            int comparisons = 0;
+            int high = arr.length - 1;
+            int low = 0;
+
+            while (high >= low) {
+                int arrItem = (low + high) / 2;
+                if (arr[arrItem].compareTo(items[i]) > 0) {
+                    high = arrItem - 1;
+                    comparisons++;
+                } else if (arr[arrItem].compareTo(items[i]) < 0) {
+                    low = arrItem + 1;
+                    comparisons++;
+                } else {
+                    numComparisons[i] = comparisons;
+                    break;
+                }
+            }
+        }
+
+        int sum = 0;
+        for (int i = 0; i < numComparisons.length; i++) {
+            sum = sum + numComparisons[i];
+        }
+
         int avg = sum / 42;
 
         return avg;
