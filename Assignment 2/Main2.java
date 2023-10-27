@@ -4,11 +4,13 @@ import java.util.Scanner;
 import java.util.Arrays;
 import java.util.Random;
 import java.util.ArrayList;
+import java.text.DecimalFormat;
 
 public class Main2 {
 
     private static final int HASH_TABLE_SIZE = 250;
     private static final int LINES_IN_FILE = 666;
+    private static final DecimalFormat df = new DecimalFormat("0.00");
 
     public static void main(String[] args) throws FileNotFoundException {
         File magicItemsFile = new File("magicitems.txt");
@@ -20,15 +22,7 @@ public class Main2 {
         int binarySearchComparisons = binarySearch(magicItemsArray, randomItems);
         System.out.println("Binary search comparisons: " + binarySearchComparisons);
 
-        /*
-         * Prints out binarySearchComparisons to make sure the search algorithm
-         * is working correctly
-         * for (int i = 0; i < binarySearchComparisons.length; i++) {
-         * System.out.println(binarySearchComparisons[i]);
-         * }
-         */
         int[] hashValues = new int[LINES_IN_FILE];
-
         int hashCode = 0;
         for (int i = 0; i < LINES_IN_FILE; i++) {
             // System.out.print(i);
@@ -37,16 +31,11 @@ public class Main2 {
             // System.out.format("%03d%n", hashCode);
             hashValues[i] = hashCode;
         }
-
         int[] bucketCount = analyzeHashValues(hashValues, magicItemsArray);
-
         ArrayList<String[]> hashes = new ArrayList<String[]>();
-
         hashes = fillHashes(magicItemsArray, bucketCount, hashes);
-
-        for (String i[] : hashes) {
-            System.out.print(Arrays.toString(i));
-        }
+        double hashingComparisons = retrieveItems(hashes, magicItemsArray, randomItems);
+        System.out.println("Hashing retrieval comparisons: " + df.format(hashingComparisons));
     }
 
     public static String[] fileToArray(File file) throws FileNotFoundException {
@@ -212,25 +201,19 @@ public class Main2 {
             int thisValue = (int) thisLetter;
             letterTotal = letterTotal + thisValue;
 
-            // Test: print the char and the hash.
-            /*
-             * System.out.print(" [");
-             * System.out.print(thisLetter);
-             * System.out.print(thisValue);
-             * System.out.print("] ");
-             * //
-             */
         }
 
         // Scale letterTotal to fit in HASH_TABLE_SIZE.
         int hashCode = (letterTotal * 1) % HASH_TABLE_SIZE; // % is the "mod" operator
-        // TODO: Experiment with letterTotal * 2, 3, 5, 50, etc.
 
         return hashCode;
     }
 
+    // Took the code from the website provided and removed the code that I didn't
+    // need
+    // I need the bucketCount array so I could populate the ArrayList with the
+    // proper items at the proper hash values
     private static int[] analyzeHashValues(int[] hashValues, String[] arr) {
-        System.out.println("\nHash Table Usage:");
 
         // Sort the hash values.
         Arrays.sort(hashValues);
@@ -241,15 +224,11 @@ public class Main2 {
         int arrayIndex = 0;
 
         for (int i = 0; i < HASH_TABLE_SIZE; i++) {
-            System.out.format("%03d ", i);
             asteriskCount = 0;
             while ((arrayIndex < LINES_IN_FILE) && (hashValues[arrayIndex] == i)) {
-                System.out.print("*");
                 asteriskCount = asteriskCount + 1;
                 arrayIndex = arrayIndex + 1;
             }
-            System.out.print(" ");
-            System.out.println(asteriskCount);
             bucketCount[i] = asteriskCount;
             totalCount = totalCount + asteriskCount;
         }
@@ -258,9 +237,14 @@ public class Main2 {
     }
 
     public static ArrayList<String[]> fillHashes(String[] magicArr, int[] buckCount, ArrayList<String[]> hashes) {
+        // Loops through the buckCount array (which has how many values are chained at
+        // each hash value)
         for (int i = 0; i < HASH_TABLE_SIZE; i++) {
             String[] temp = new String[buckCount[i]];
             int tempCounter = 0;
+            // Loops through the magicArr (magicItemsArray) and checks if each item's hash
+            // value is equal to the current has value. If it is, then the item is added to
+            // a temporary String Array
             for (int k = 0; k < LINES_IN_FILE; k++) {
                 int tempHashCode = makeHashCode(magicArr[k]);
                 if (tempHashCode == i) {
@@ -268,8 +252,46 @@ public class Main2 {
                     tempCounter++;
                 }
             }
+            // Once all the items are added to the current hash value array that array is
+            // stored in the hashes ArrayList
             hashes.add(temp);
         }
         return hashes;
+    }
+
+    public static double retrieveItems(ArrayList<String[]> hashes, String[] magicArr, String[] randItems) {
+        int[] numComparisons = new int[42];
+        int comparisons = 0;
+
+        // Loops through the randItems (randomItems) Array and for each item checks its
+        // gets the hash value. We also rerieve the proper array for the corresponding
+        // hash value from the ArrayList
+        for (int i = 0; i < randItems.length; i++) {
+            int tempHashCode = makeHashCode(randItems[i]);
+            String[] tempFromHashes = hashes.get(tempHashCode);
+            comparisons = 1;
+
+            // Loops through the Array for the hash value of the current random item and
+            // compares each string in the array to see which one is the same as the random
+            // item
+            for (int k = 0; k < tempFromHashes.length; k++) {
+                comparisons++;
+                if (randItems[i].compareTo(tempFromHashes[k]) == 0) {
+                    numComparisons[i] = comparisons;
+                    break;
+                }
+            }
+        }
+
+        // Takes the average number of comparisons that it takes to find/retrieve the
+        // item
+        int sum = 0;
+        for (int i = 0; i < numComparisons.length; i++) {
+            sum = sum + numComparisons[i];
+        }
+
+        double avg = sum / 42.00;
+
+        return avg;
     }
 }
