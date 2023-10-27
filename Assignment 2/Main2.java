@@ -1,9 +1,14 @@
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.Scanner;
+import java.util.Arrays;
 import java.util.Random;
+import java.util.ArrayList;
 
 public class Main2 {
+
+    private static final int HASH_TABLE_SIZE = 250;
+    private static final int LINES_IN_FILE = 666;
 
     public static void main(String[] args) throws FileNotFoundException {
         File magicItemsFile = new File("magicitems.txt");
@@ -11,9 +16,9 @@ public class Main2 {
         String[] randomItems = randomItems(magicItemsArray);
         quickSort(magicItemsArray, 0, magicItemsArray.length - 1);
         int linearSeachComparisons = linearSearch(magicItemsArray, randomItems);
-        System.out.println(linearSeachComparisons);
+        System.out.println("Linear search comparisons: " + linearSeachComparisons);
         int binarySearchComparisons = binarySearch(magicItemsArray, randomItems);
-        System.out.println(binarySearchComparisons);
+        System.out.println("Binary search comparisons: " + binarySearchComparisons);
 
         /*
          * Prints out binarySearchComparisons to make sure the search algorithm
@@ -22,6 +27,26 @@ public class Main2 {
          * System.out.println(binarySearchComparisons[i]);
          * }
          */
+        int[] hashValues = new int[LINES_IN_FILE];
+
+        int hashCode = 0;
+        for (int i = 0; i < LINES_IN_FILE; i++) {
+            // System.out.print(i);
+            // System.out.print(". " + magicItemsArray[i] + " - ");
+            hashCode = makeHashCode(magicItemsArray[i]);
+            // System.out.format("%03d%n", hashCode);
+            hashValues[i] = hashCode;
+        }
+
+        int[] bucketCount = analyzeHashValues(hashValues, magicItemsArray);
+
+        ArrayList<String[]> hashes = new ArrayList<String[]>();
+
+        hashes = fillHashes(magicItemsArray, bucketCount, hashes);
+
+        for (String i[] : hashes) {
+            System.out.print(Arrays.toString(i));
+        }
     }
 
     public static String[] fileToArray(File file) throws FileNotFoundException {
@@ -175,5 +200,76 @@ public class Main2 {
         int avg = sum / 42;
 
         return avg;
+    }
+
+    private static int makeHashCode(String str) {
+        str = str.toUpperCase();
+        int length = str.length();
+        int letterTotal = 0;
+        // Iterate over all letters in the string, totalling their ASCII values.
+        for (int i = 0; i < length; i++) {
+            char thisLetter = str.charAt(i);
+            int thisValue = (int) thisLetter;
+            letterTotal = letterTotal + thisValue;
+
+            // Test: print the char and the hash.
+            /*
+             * System.out.print(" [");
+             * System.out.print(thisLetter);
+             * System.out.print(thisValue);
+             * System.out.print("] ");
+             * //
+             */
+        }
+
+        // Scale letterTotal to fit in HASH_TABLE_SIZE.
+        int hashCode = (letterTotal * 1) % HASH_TABLE_SIZE; // % is the "mod" operator
+        // TODO: Experiment with letterTotal * 2, 3, 5, 50, etc.
+
+        return hashCode;
+    }
+
+    private static int[] analyzeHashValues(int[] hashValues, String[] arr) {
+        System.out.println("\nHash Table Usage:");
+
+        // Sort the hash values.
+        Arrays.sort(hashValues);
+
+        int asteriskCount = 0;
+        int[] bucketCount = new int[HASH_TABLE_SIZE];
+        int totalCount = 0;
+        int arrayIndex = 0;
+
+        for (int i = 0; i < HASH_TABLE_SIZE; i++) {
+            System.out.format("%03d ", i);
+            asteriskCount = 0;
+            while ((arrayIndex < LINES_IN_FILE) && (hashValues[arrayIndex] == i)) {
+                System.out.print("*");
+                asteriskCount = asteriskCount + 1;
+                arrayIndex = arrayIndex + 1;
+            }
+            System.out.print(" ");
+            System.out.println(asteriskCount);
+            bucketCount[i] = asteriskCount;
+            totalCount = totalCount + asteriskCount;
+        }
+
+        return bucketCount;
+    }
+
+    public static ArrayList<String[]> fillHashes(String[] magicArr, int[] buckCount, ArrayList<String[]> hashes) {
+        for (int i = 0; i < HASH_TABLE_SIZE; i++) {
+            String[] temp = new String[buckCount[i]];
+            int tempCounter = 0;
+            for (int k = 0; k < LINES_IN_FILE; k++) {
+                int tempHashCode = makeHashCode(magicArr[k]);
+                if (tempHashCode == i) {
+                    temp[tempCounter] = magicArr[k];
+                    tempCounter++;
+                }
+            }
+            hashes.add(temp);
+        }
+        return hashes;
     }
 }
