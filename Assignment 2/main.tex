@@ -1,0 +1,121 @@
+\documentclass{article}
+\usepackage{graphicx} % Required for inserting images
+\usepackage{lineno}
+\usepackage[paperheight=11in, paperwidth=8in, top=10mm, bottom=20mm, left=20mm, right=20mm]{geometry}
+
+\title{Algorithms Assignment 2}
+\author{Thomas Breaton}
+\date{October 2023}
+
+\begin{document}
+
+\maketitle
+
+\section{Main Function}
+\begin{figure}[h]
+    \centering
+    \includegraphics[width = 15cm]{Assignment2_Main.png}
+    \caption{Image of main function}
+    \label{fig:mainFunction}
+\end{figure}
+\textbf{This section of code consists of what I'm importing from the java library, some constants, and the code that I want to run.The main function in this code calls for the file of magic items to be turned into an array, 42 random items to be selected from the array of magic items, linear search to be performed for the 42 items, binary search to be performed for the 42 items, a hashing table to be created, and the same 42 items to be retrieved from the hash table.}
+\newpage
+
+\section{Reading File Into Array}
+\begin{figure}[h]
+    \centering
+    \includegraphics[width = 15cm]{Assignment2_FileToArray.png}
+    \caption{Image of fileToArray function}
+    \label{fig:fileToArray}
+\end{figure}
+\textbf{This section of code is the same from Assignment 1. Here we are taking the magicItems file and going line by line putting each item into an array. Once there are no more lines remaining in the file, the function returns the full array.}
+\newpage
+
+\section{Generating 42 Random Items}
+\begin{figure}[h]
+    \centering
+    \includegraphics[width = 15cm]{Assignment2_RandomItems.png}
+    \caption{Image of randomItems function}
+    \label{fig:randomItems}
+\end{figure}
+\textbf{This function generates an array of 42 random items which will be what we are searching for later in the code. I created a new array to keep track of the 42 string values that will be selected. Then I created a while loop that iterates until the array is full. To ensure that no string value is used twice I created another new array that stores the random numbers that have already been created and aren't duplicates. If the new generated number isn't a duplicate then it is added to the array. Following that, the generated number is used to access the item and add it to the randomItems array that is returned.}
+\newpage
+
+\section{Quick Sort}
+\begin{figure}[h]
+    \centering
+    \includegraphics[width = 15cm]{Assignment2_QuickSort.png}
+    \caption{Image of quickSort function}
+    \label{fig:quickSort}
+\end{figure}
+\textbf{This code is also taken from Assignment 1. We use the quickSort function to sort the array so that binary search will work properly. It is also easier to maneuver through the array if its sorted.}
+\newpage
+
+\section{Linear Search}
+\begin{figure}[h]
+    \centering
+    \includegraphics[width = 15cm]{Assignment2_LinearSearch.png}
+    \caption{Image of linearSearch function}
+    \label{fig:linearSearch}
+\end{figure}
+\textbf{This section of code is our linear search function. This function loops through the array for each random item and compares the item in the current position of the magicItems array with the current random item until a match is found. The asymptotic running time for a linear search is O(n) but in this case, since we have to do multiple searches, we have a nested loop so the function's asymptotic running time is O($n^2$). Also this function counts the number of comparisons done and puts them into an array. Using this array the average amount of comparisons is found and returned to the user.}
+\newpage
+
+\section{Binary Search}
+\begin{figure}[h]
+    \centering
+    \includegraphics[width = 15cm]{Assignment2_BinarySearch.png}
+    \caption{Image of binarySearch function}
+    \label{fig:binarySearch}
+\end{figure}
+\textbf{This section of the code is our binary search function. Binary search works by looking at the middle of our array and comparing it the string we are trying to find. From there we break up the array into two pieces, if the string value is smaller we use the left and if the string values is larger we use the right. This continues until we find the string we are looking for, typically when there is only one item left to compare to. The asymptotic running time for binary search is O($log_2(n)$), but again since we are running through it for each random item the running time for this function actually becomes O($nlog_2(n)$). This function also counts the number of comparisons, stores them in an array, and finds and returns the average number of comparisons.}
+\newpage
+
+\section{Hashing}
+\begin{figure}[h]
+    \centering
+    \includegraphics[width = 15cm]{Assignment2_MakeHashCode.png}
+    \caption{Image of makeHashCode function}
+    \label{fig:makeHashCode}
+\end{figure}
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[width = 15cm]{Assignment2_AnalyzeHashValues.png}
+    \caption{Image of analyzeHashValues function}
+    \label{fig:analyzeHashValues}
+\end{figure}
+\textbf{This section of code is how we get the hash values for each item and keep track of how many items are stored at each hash value. The makeHashCode function works by taking a string, making it all uppercase, and getting the total ASCII value of the string. Then that total is divided by 250 and the remainder is taken and returned as the hash value. I modified the analyzeHashValues function so it returns the array bucketCount which contains the amount of items stored at each hash value. This is important because of the way I fill the hash table.}
+\newpage
+
+\section{Fill Hash Table}
+\begin{figure}[h]
+    \centering
+    \includegraphics[width = 15cm]{Assignment2_FillHashes.png}
+    \caption{Image of fillHashes function}
+    \label{fig:fillHashes}
+\end{figure}
+\textbf{This function is how the hash table is filled with the proper values. To start, I created an ArrayList of Arrays so that the table is easy to navigate through. This ArrayList along with the magicItemsArray and bucketCount Array, from the analyzeHashValues function, are taken as inputs. Then we loop through the ArrayList and create a temporary Array of the length of bucketCount[i] and implement a counter so the items are placed through the whole Array. Next we loop through the magicItemsArray and compare the hash values to the current value of the ArrayList, if they are the same the item is added to the temporary Array. Once the array has been looped through, the temporary Array is added to the ArrayList.}
+\newpage
+
+\section{Retrieve Items From Hash Table}
+\begin{figure}[h]
+    \centering
+    \includegraphics[width = 15cm]{Assignment2_RetrieveItems.png}
+    \caption{Image of retrieveItems function}
+    \label{fig:retrieveItems}
+\end{figure}
+\textbf{This function is how we search through the hash table to find the 42 items we generated before. This is done by looping through the randomItems Array and generating the hash value of each item. Then using that hash value, we take the String being stored at that point in the ArrayList. From there, we loop through the Array we selected and we compare the strings to the random item. Once it is found the loop breaks and the next item is searched for. The function keeps track of the number of comparisons and stores them in an Array, then the average number of comparisons is found and returned in the same way as linear and binary search. The asymptotic running time for this function is $\Omega$(1) and O(n). In this case we are closer to O(n) because of chaining and having to loop through the smaller Arrays in the ArrayList.}
+\newpage
+
+\section{Results}
+    \begin{figure}[h]
+    \centering
+    \includegraphics[width = 15cm]
+    {Assignment2_Results.png}
+    \caption{Image of the output of the code}
+    \label{fig:results}
+\end{figure}
+\textbf{These are the results of the code. The average number of comparisons per search does vary due to new items being selected every time the code is ran, but the results are always pretty consistent. We can see that linear search has the biggest jumps between runs but the results are still always around 333, which is half of the total lines of the Array. Binary search and retrieving from the hash table are very consistent being right around 6 and 3.30 respectively.}
+
+\end{document}
