@@ -10,9 +10,10 @@ public class Main3 {
         File magicItemsFile = new File("magicitems.txt");
         String[] magicItemsArray = fileToArray(magicItemsFile);
         BST_class bst = new BST_class();
+        String path = "";
 
         for (int i = 0; i < LINES_IN_MAGIC_ITEMS; i++) {
-            bst.insert(magicItemsArray[i]);
+            bst.insert(magicItemsArray[i], path);
         }
 
         bst.inOrder();
@@ -42,11 +43,13 @@ class BST_class {
     class Node {
         String key;
         Node left, right;
+        String path;
 
         public Node(String item) {
             key = item;
             left = null;
             right = null;
+            path = "";
         }
     }
 
@@ -58,20 +61,24 @@ class BST_class {
         root = null;
     }
 
-    void insert(String key) {
-        root = BST_Insert(root, key);
+    void insert(String key, String path) {
+        path = "";
+        root = BST_Insert(root, key, path);
     }
 
-    Node BST_Insert(Node root, String key) {
+    Node BST_Insert(Node root, String key, String path) {
         if (root == null) {
             root = new Node(key);
+            System.out.println(key + ": path - " + path);
             return root;
         }
 
         if (key.compareToIgnoreCase(root.key) < 0) {
-            root.left = BST_Insert(root.left, key);
+            path = path + "L,";
+            root.left = BST_Insert(root.left, key, path);
         } else {
-            root.right = BST_Insert(root.right, key);
+            path = path + "R,";
+            root.right = BST_Insert(root.right, key, path);
         }
         return root;
     }
