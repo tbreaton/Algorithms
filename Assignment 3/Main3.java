@@ -20,11 +20,20 @@ public class Main3 {
         File magicItemsToFindFile = new File("magicitems-find-in-bst.txt");
         String[] magicItemsToFindArray = fileToArray(magicItemsToFindFile);
 
+        int[] searchComparisons = new int[42];
+
         for (int i = 0; i < LINES_IN_ITEMS_TO_FIND; i++) {
-            bst.search(magicItemsToFindArray[i], path);
+            searchComparisons = bst.search(magicItemsToFindArray[i], path, searchComparisons, i);
         }
 
-        // bst.search(magicItemsToFindArray[2], path);
+        int sum = 0;
+        for (int i = 0; i < LINES_IN_ITEMS_TO_FIND; i++) {
+            sum = sum + searchComparisons[i];
+        }
+
+        int avg = sum / 42;
+        System.out.println("Average comparisons for BST search: " + avg);
+
     }
 
     public static String[] fileToArray(File file) throws FileNotFoundException {
@@ -111,49 +120,29 @@ class BST_class {
         }
     }
 
-    void search(String key, String path) {
+    int[] search(String key, String path, int[] numComparisons, int placeInArray) {
         Node rootToChange;
         int comparisons = 0;
         path = "";
-        rootToChange = search_BST(root, key, path, comparisons);
+        rootToChange = search_BST(root, key, path, comparisons, numComparisons, placeInArray);
+        return numComparisons;
     }
 
-    Node search_BST(Node root, String key, String path, int comparisons) {
+    Node search_BST(Node root, String key, String path, int comparisons, int[] numComparisons, int placeInArray) {
         if (root == null || root.key.compareTo(key) == 0) {
-            System.out.println(key + ": path - " + path + ": comparisons - " + comparisons);
+            System.out.println(key + ": Path - " + path + ": Comparisons - " + comparisons);
+            numComparisons[placeInArray] = comparisons;
             return root;
         }
         if (root.key.compareTo(key) > 0) {
             path = path + "L,";
             comparisons++;
-            return search_BST(root.left, key, path, comparisons);
+            return search_BST(root.left, key, path, comparisons, numComparisons, placeInArray);
         } else {
             path = path + "R,";
             comparisons++;
-            return search_BST(root.right, key, path, comparisons);
+            return search_BST(root.right, key, path, comparisons, numComparisons, placeInArray);
         }
 
     }
-
-    /*
-     * boolean search(String key) {
-     * root = search_Recursive(root, key);
-     * if (root != null)
-     * return true;
-     * else
-     * return false;
-     * }
-     * 
-     * // recursive insert function
-     * Node search_Recursive(Node root, String key) {
-     * // Base Cases: root is null or key is present at root
-     * if (root == null || root.key.compareTo(key) == 0)
-     * return root;
-     * // val is greater than root's key
-     * if (root.key.compareTo(key) > 0)
-     * return search_Recursive(root.left, key);
-     * // val is less than root's key
-     * return search_Recursive(root.right, key);
-     * }
-     */
 }
