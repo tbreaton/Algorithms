@@ -16,7 +16,7 @@ public class Main3 {
         for (int i = 0; i < LINES_IN_MAGIC_ITEMS; i++) {
             bst.insert(magicItemsArray[i], path);
         }
-        bst.inOrder();
+        // bst.inOrder();
 
         File magicItemsToFindFile = new File("magicitems-find-in-bst.txt");
         String[] magicItemsToFindArray = fileToArray(magicItemsToFindFile);
@@ -56,7 +56,12 @@ public class Main3 {
         g.addEdge(5, 7);
         g.addEdge(6, 7);
 
-        g.printGraph();
+        g.printAdjacencyList();
+
+        int graphSize = g.graph.size();
+
+        String[][] matrix = g.initializeMatrix(graphSize);
+        g.printMatrix(graphSize, matrix);
     }
 
     public static String[] fileToArray(File file) throws FileNotFoundException {
@@ -223,12 +228,38 @@ class Graph {
         tempDest.neighbors.add(source);
     }
 
-    void printGraph() {
+    void printAdjacencyList() {
         for (int i = 0; i < graph.size(); i++) {
             GraphNode tempVertex = graph.get(i);
             System.out.print("Vertex " + tempVertex.vertexID + " has neighbors: ");
             for (int k = 0; k < tempVertex.neighbors.size(); k++) {
                 System.out.print(tempVertex.neighbors.get(k) + ", ");
+            }
+            System.out.println();
+        }
+    }
+
+    String[][] initializeMatrix(int graphSize) {
+        String[][] matrix = new String[graphSize][graphSize];
+        for (int i = 0; i < graphSize; i++) {
+            matrix[i][0] = Integer.toString(i);
+            if (i == 0) {
+                for (int k = 1; k < graphSize; k++) {
+                    matrix[i][k] = Integer.toString(k);
+                }
+            } else {
+                for (int k = 1; k < graphSize; k++) {
+                    matrix[i][k] = ".";
+                }
+            }
+        }
+        return matrix;
+    }
+
+    void printMatrix(int graphSize, String[][] matrix) {
+        for (int i = 0; i < graphSize; i++) {
+            for (int k = 0; k < graphSize; k++) {
+                System.out.print(matrix[i][k] + " ");
             }
             System.out.println();
         }
