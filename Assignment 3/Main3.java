@@ -61,6 +61,7 @@ public class Main3 {
         int graphSize = g.graph.size();
 
         String[][] matrix = g.initializeMatrix(graphSize);
+        g.fillMatrix(matrix, graphSize, g);
         g.printMatrix(graphSize, matrix);
     }
 
@@ -88,6 +89,38 @@ public class Main3 {
         scan.close();
         iteration++;
         return itemsArray;
+    }
+
+    void fileToGraph(File file, int lineCounter) throws FileNotFoundException {
+        Scanner scan = new Scanner(file);
+
+        Graph g = new Graph();
+
+        int tempLineCounter = 0;
+        while (scan.hasNextLine()) {
+            String data = scan.nextLine();
+            tempLineCounter++;
+            String delims = "[ ]+";
+            String[] tempString = data.split(delims);
+            if (tempLineCounter >= lineCounter) {
+                if (tempString[0].compareTo("new") == 0) {
+                    g = new Graph();
+                    lineCounter++;
+                } else if (tempString[0].compareTo("--") == 0) {
+                    lineCounter++;
+                } else if (tempString[1].compareTo("vertex") == 0) {
+                    g.addVertex(Integer.parseInt(tempString[2]));
+                    lineCounter++;
+                } else if (tempString[1].compareTo("edge") == 0) {
+                    g.addEdge(Integer.parseInt(tempString[2]), Integer.parseInt(tempString[4]));
+                    lineCounter++;
+                } else {
+                    lineCounter++;
+                    break;
+                }
+            }
+        }
+        scan.close();
     }
 
 }
@@ -240,15 +273,15 @@ class Graph {
     }
 
     String[][] initializeMatrix(int graphSize) {
-        String[][] matrix = new String[graphSize][graphSize];
-        for (int i = 0; i < graphSize; i++) {
+        String[][] matrix = new String[graphSize + 1][graphSize + 1];
+        for (int i = 0; i <= graphSize; i++) {
             matrix[i][0] = Integer.toString(i);
             if (i == 0) {
-                for (int k = 1; k < graphSize; k++) {
+                for (int k = 1; k <= graphSize; k++) {
                     matrix[i][k] = Integer.toString(k);
                 }
             } else {
-                for (int k = 1; k < graphSize; k++) {
+                for (int k = 1; k <= graphSize; k++) {
                     matrix[i][k] = ".";
                 }
             }
@@ -257,29 +290,26 @@ class Graph {
     }
 
     void printMatrix(int graphSize, String[][] matrix) {
-        for (int i = 0; i < graphSize; i++) {
-            for (int k = 0; k < graphSize; k++) {
+        for (int i = 0; i <= graphSize; i++) {
+            for (int k = 0; k <= graphSize; k++) {
                 System.out.print(matrix[i][k] + " ");
             }
             System.out.println();
         }
     }
-}
 
-/*
- * void fileToGraph(File file) throws FileNotFoundException {
- * Scanner scan = new Scanner(file);
- * 
- * int i = 0;
- * 
- * while (scan.hasNextLine()) {
- * String data = scan.nextLine();
- * String delims = "[ ]+";
- * String[] tempString = data.split(delims);
- * if (tempString[0].compareTo("new") == 0 || tempString[0].compareTo("--") ==
- * 0) {
- * 
- * }
- * }
- * }
- */
+    void fillMatrix(String[][] matrix, int graphSize, Graph g) {
+        int neighbor;
+        for (int i = 1; i <= graphSize; i++) {
+            GraphNode tempVertex = g.getVertexByID(i);
+            for (int k = 0; k <= graphSize; k++) {
+                for (int j = 0; j < tempVertex.neighbors.size(); j++) {
+                    neighbor = tempVertex.neighbors.get(j);
+                    if (neighbor == k) {
+                        matrix[i][k] = "1";
+                    }
+                }
+            }
+        }
+    }
+}
