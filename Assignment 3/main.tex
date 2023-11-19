@@ -1,0 +1,119 @@
+\documentclass{article}
+\usepackage{graphicx} % Required for inserting images
+\usepackage{lineno}
+\usepackage[paperheight=11in, paperwidth=8in, top=10mm, bottom=20mm, left=20mm, right=20mm]{geometry}
+
+\title{Algorithms Assignment 3}
+\author{Thomas Breaton}
+\date{November 2023}
+
+\begin{document}
+
+\maketitle
+
+\section{Main Function}
+\begin{figure}[h]
+    \centering
+    \includegraphics[width = 15cm]{Assignment3-MainFunction1.png}
+    \caption{Image of main function}
+    \label{fig:mainFunction1}
+\end{figure}
+\begin{figure}[h]
+    \centering
+    \includegraphics[width = 15cm]{Assignment3-MainFunction2.png}
+    \caption{Image of main function}
+    \label{fig:mainFunction2}
+\end{figure}
+\newpage
+\textbf{This section of code consists of what is being imported, constants, and the code that I want to run. The main function in this assignment calls for files to be scanned, binary trees to be made and searched, and graphs to be made and traversed.}
+\newpage
+
+\section{Reading File Into Array}
+\begin{figure}[h]
+    \centering
+    \includegraphics[width = 15cm]{Assignment3-FileToArray.png}
+    \caption{Image of fileToArray function}
+    \label{fig:filetoArray}
+\end{figure}
+\textbf{This section of code is the same from Assignment 1 and 2. Here we are taking the magicItems file and going line by line putting each item into an array. Once there are no more lines remaining in the file, the function returns the full array.}
+\newpage
+
+\section{Reading a File Into Graphs}
+\begin{figure}[h]
+    \centering
+    \includegraphics[width = 15cm]{Assignment3-FileToGraphs.png}
+    \caption{Image of fileToGraphs function}
+    \label{fig:filetoGraphs}
+\end{figure}
+\textbf{This section of code takes a file and reads line by line looking for the pattern of "add vertex," "add edge," and blank lines. With these three lines we are able to create a graph and then add those graphs into an ArrayList of graphs so they can be easily managed.}
+\newpage
+
+\section{Binary Search Tree Class}
+\begin{figure}[h]
+    \centering
+    \includegraphics[width = 10cm]{Assignment3-BST1.png}
+    \caption{Image of BST class}
+    \label{fig:BST}
+\end{figure}
+\begin{figure}[h]
+    \centering
+    \includegraphics[width = 10cm]{Assignment3-BST2.png}
+    \caption{Image of BST class}
+    \label{fig:BST}
+\end{figure}
+\newpage
+\textbf{This section of code creates the BST or binary search tree full of the information from magicItemsFile. The BST class has 3 major components, the insert function, the in order traversal function, and the search function. With these 3 functions we are able to create a tree with the objects we want, we can print out every object to know what we have, and we can search for objects within the tree. The running time for searching within the BST is O(n), however, since we are running through an additional loop our running time would be O(n$^2$).}
+\newpage
+
+\section{Graph Class}
+\begin{figure}[h]
+    \centering
+    \includegraphics[width = 10cm]{Assignment3-GraphClass1.png}
+    \caption{Image of Graph class}
+    \label{fig:Graph}
+\end{figure}
+\begin{figure}[h]
+    \centering
+    \includegraphics[width = 10cm]{Assignment3-GraphClass2.png}
+    \caption{Image of Graph class}
+    \label{fig:Graph}
+\end{figure}
+\begin{figure}[h]
+    \centering
+    \includegraphics[width = 10cm]{Assignment3-GraphClass3.png}
+    \caption{Image of Graph class}
+    \label{fig:Graph}
+\end{figure}
+\begin{figure}[h]
+    \centering
+    \includegraphics[width = 10cm]{Assignment3-GraphClass4.png}
+    \caption{Image of Graph class}
+    \label{fig:Graph}
+\end{figure}
+\newpage
+\textbf{This section of code is dealing with everything regarding out graph class. This is how we initialize a graph, create a subclass for vertexes, I called it GraphNode, get vertexes based on ID, make edges, create the linked objects, create a matrix of the vertexes and edges, and create adjacency lists. On top of that, this is how we use our depth first traversal and breadth first traversal. The running time for our depth first traversal function is O(n), but our running time for our breadth first traversal function is O(V + E).}
+\newpage
+
+\section{Results}
+\begin{figure}[h]
+    \centering
+    \includegraphics[width = 10cm]{Assignment3-Results1.png}
+    \caption{Image of Results of inserting items into the BST}
+    \label{fig:Results1}
+\end{figure}
+\begin{figure}[h]
+    \centering
+    \includegraphics[width = 10cm]{Assignment3-Results2.png}
+    \caption{Image of Results of searching for items in the BST}
+    \label{fig:Results2}
+\end{figure}
+\begin{figure}[h]
+    \centering
+    \includegraphics[width = 10cm]{Assignment3-Results3.png}
+    \caption{Image of Results from graph functions}
+    \label{fig:Results3}
+\end{figure}
+\newpage
+\textbf{These are some of the results that I got after running the code. You can see when inserting items into the BST, each item's path is displayed. When searching for an item in the BST the path is also displayed as well as the number of comparisons needed. Lastly, you can see the adjacency list, matrix, depth first traveral, and breadth first traverasl for one of the graphs that we had to create.}
+
+\end{document}
