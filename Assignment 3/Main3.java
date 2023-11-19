@@ -2,6 +2,9 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.Scanner;
 import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.PriorityQueue;
+import java.util.Queue;
 
 public class Main3 {
 
@@ -38,13 +41,25 @@ public class Main3 {
         File graphsOne = new File("graphs1.txt");
 
         ArrayList<Graph> graphs = fileToGraphs(graphsOne);
+
         for (int i = 0; i < graphs.size(); i++) {
             graphs.get(i).printAdjacencyList();
             int graphSize = graphs.get(i).graph.size();
             String[][] matrix = graphs.get(i).initializeMatrix(graphSize);
             graphs.get(i).fillMatrix(matrix, graphSize, graphs.get(i));
             graphs.get(i).printMatrix(graphSize, matrix);
+            System.out.print("DFS: ");
+            graphs.get(i).DFS(graphs.get(i).getVertexByID(1));
+            System.out.println();
+            for (int k = 1; k <= graphSize; k++) {
+                graphs.get(i).getVertexByID(k).setProcessed(false);
+            }
+            System.out.print("BFS: ");
+            graphs.get(i).BFS(graphs.get(i).getVertexByID(1));
+            System.out.println();
         }
+
+
     }
 
     public static String[] fileToArray(File file) throws FileNotFoundException {
@@ -201,6 +216,9 @@ class Graph {
             neighbors = new ArrayList<Integer>();
         }
 
+        public void setProcessed(boolean val) {
+            processed = val;
+        }
     }
 
     Graph() {
@@ -266,6 +284,27 @@ class Graph {
         return matrix;
     }
 
+    void fillMatrix(String[][] matrix, int graphSize, Graph g) {
+        int neighbor;
+        GraphNode tempVertex;
+        for (int i = 0; i <= graphSize; i++) {
+            if (g.getVertexByID(i) != null) {
+                tempVertex = g.getVertexByID(i);
+            } else {
+                i++;
+                tempVertex = g.getVertexByID(i);
+            }
+            for (int k = 0; k <= graphSize; k++) {
+                for (int j = 0; j < tempVertex.neighbors.size(); j++) {
+                    neighbor = tempVertex.neighbors.get(j);
+                    if (neighbor == k) {
+                        matrix[i][k] = "1";
+                    }
+                }
+            }
+        }
+    }
+
     void printMatrix(int graphSize, String[][] matrix) {
         for (int i = 0; i <= graphSize; i++) {
             for (int k = 0; k <= graphSize; k++) {
@@ -275,21 +314,31 @@ class Graph {
         }
     }
 
-    void fillMatrix(String[][] matrix, int graphSize, Graph g) {
-        int neighbor;
-        GraphNode tempVertex;
-        for (int i = 0; i <= graphSize; i++) {
-            if (g.getVertexByID(i) != null) {
-                tempVertex = g.getVertexByID(i);
-            } else {
-                break;
+    void DFS(GraphNode fromVertex) {
+        if (!fromVertex.processed) {
+            System.out.print(fromVertex.vertexID + ", ");
+            fromVertex.processed = true;
+        }
+        for (int i = 0; i < fromVertex.neighbors.size(); i++) {
+            GraphNode neighborVertex = getVertexByID(fromVertex.neighbors.get(i));
+            if (!neighborVertex.processed) {
+                DFS(neighborVertex);
             }
-            for (int k = 0; k <= graphSize; k++) {
-                for (int j = 0; j < tempVertex.neighbors.size(); j++) {
-                    neighbor = tempVertex.neighbors.get(j);
-                    if (neighbor == k) {
-                        matrix[i][k] = "1";
-                    }
+        }
+    }
+
+    void BFS(GraphNode fromVertex) {
+        Queue<GraphNode> q = new LinkedList<>();
+        q.add(fromVertex);
+        fromVertex.processed = true;
+        while (!q.isEmpty()) {
+            GraphNode currentVertex = q.remove();
+            System.out.print(currentVertex.vertexID + ", ");
+            for (int i = 0; i < currentVertex.neighbors.size(); i++) {
+                GraphNode neighborVertex = getVertexByID(currentVertex.neighbors.get(i));
+                if (!neighborVertex.processed) {
+                    q.add(neighborVertex);
+                    neighborVertex.processed = true;
                 }
             }
         }
