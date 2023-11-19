@@ -36,33 +36,15 @@ public class Main3 {
         System.out.println("Average comparisons for BST search: " + avg);
 
         File graphsOne = new File("graphs1.txt");
-        Graph g = new Graph();
-        g.addVertex(1);
-        g.addVertex(2);
-        g.addVertex(3);
-        g.addVertex(4);
-        g.addVertex(5);
-        g.addVertex(6);
-        g.addVertex(7);
-        g.addEdge(1, 2);
-        g.addEdge(1, 5);
-        g.addEdge(1, 6);
-        g.addEdge(2, 3);
-        g.addEdge(2, 5);
-        g.addEdge(2, 6);
-        g.addEdge(3, 4);
-        g.addEdge(4, 5);
-        g.addEdge(5, 6);
-        g.addEdge(5, 7);
-        g.addEdge(6, 7);
 
-        g.printAdjacencyList();
-
-        int graphSize = g.graph.size();
-
-        String[][] matrix = g.initializeMatrix(graphSize);
-        g.fillMatrix(matrix, graphSize, g);
-        g.printMatrix(graphSize, matrix);
+        ArrayList<Graph> graphs = fileToGraphs(graphsOne);
+        for (int i = 0; i < graphs.size(); i++) {
+            graphs.get(i).printAdjacencyList();
+            int graphSize = graphs.get(i).graph.size();
+            String[][] matrix = graphs.get(i).initializeMatrix(graphSize);
+            graphs.get(i).fillMatrix(matrix, graphSize, graphs.get(i));
+            graphs.get(i).printMatrix(graphSize, matrix);
+        }
     }
 
     public static String[] fileToArray(File file) throws FileNotFoundException {
@@ -91,36 +73,31 @@ public class Main3 {
         return itemsArray;
     }
 
-    void fileToGraph(File file, int lineCounter) throws FileNotFoundException {
+    public static ArrayList<Graph> fileToGraphs(File file) throws FileNotFoundException {
         Scanner scan = new Scanner(file);
 
         Graph g = new Graph();
+        ArrayList<Graph> graphArrayList = new ArrayList<Graph>();
 
-        int tempLineCounter = 0;
         while (scan.hasNextLine()) {
             String data = scan.nextLine();
-            tempLineCounter++;
             String delims = "[ ]+";
             String[] tempString = data.split(delims);
-            if (tempLineCounter >= lineCounter) {
-                if (tempString[0].compareTo("new") == 0) {
-                    g = new Graph();
-                    lineCounter++;
-                } else if (tempString[0].compareTo("--") == 0) {
-                    lineCounter++;
-                } else if (tempString[1].compareTo("vertex") == 0) {
-                    g.addVertex(Integer.parseInt(tempString[2]));
-                    lineCounter++;
-                } else if (tempString[1].compareTo("edge") == 0) {
-                    g.addEdge(Integer.parseInt(tempString[2]), Integer.parseInt(tempString[4]));
-                    lineCounter++;
-                } else {
-                    lineCounter++;
-                    break;
-                }
+            if (tempString[0].compareTo("") == 0) {
+                graphArrayList.add(g);
+            } else if (tempString[0].compareTo("new") == 0) {
+                g = new Graph();
+            } else if (tempString[0].compareTo("--") == 0) {
+
+            } else if (tempString[1].compareTo("vertex") == 0) {
+                g.addVertex(Integer.parseInt(tempString[2]));
+            } else if (tempString[1].compareTo("edge") == 0) {
+                g.addEdge(Integer.parseInt(tempString[2]), Integer.parseInt(tempString[4]));
             }
         }
+        graphArrayList.add(g);
         scan.close();
+        return graphArrayList;
     }
 
 }
@@ -300,8 +277,13 @@ class Graph {
 
     void fillMatrix(String[][] matrix, int graphSize, Graph g) {
         int neighbor;
-        for (int i = 1; i <= graphSize; i++) {
-            GraphNode tempVertex = g.getVertexByID(i);
+        GraphNode tempVertex;
+        for (int i = 0; i <= graphSize; i++) {
+            if (g.getVertexByID(i) != null) {
+                tempVertex = g.getVertexByID(i);
+            } else {
+                break;
+            }
             for (int k = 0; k <= graphSize; k++) {
                 for (int j = 0; j < tempVertex.neighbors.size(); j++) {
                     neighbor = tempVertex.neighbors.get(j);
