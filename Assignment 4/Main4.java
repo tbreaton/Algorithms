@@ -181,3 +181,31 @@ class BellmanFord {
         System.out.print(" --> " + i);
     }
 }
+
+class Spice{
+    private int value;
+    private float quantity;
+    private String name;
+
+    private ArrayList<Spice> spiceList = new ArrayList<Spice>();
+
+    public Spice(){
+        
+    }
+
+    public void addSpice(Spice newSpice){
+        spiceList.add(newSpice);
+    }
+
+    public void setName(String name){
+        this.name = name;
+    }
+
+    public void setQuantity(float quantity){
+        this.quantity = quantity;
+    }
+
+    public void setValue(int value){
+        this.value = value;
+    }
+}
