@@ -2,6 +2,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.Scanner;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class Main4 {
@@ -21,7 +22,6 @@ public class Main4 {
 
             lineNumber = verticesToMatrix(graphs2, numberofvertices, arrayOfMatrix, lineNumber);
             lineNumber++;
-            System.out.println("Line number" + lineNumber);
         }
 
         for (int i = 0; i < arrayOfMatrix.size(); i++) {
@@ -42,7 +42,7 @@ public class Main4 {
             }
 
             BellmanFord bellmanford = new BellmanFord(numberofvertices);
-            bellmanford.BellmanFordEvaluation(source, adjacencymatrix);
+            bellmanford.BellmanFordEvaluation(source, adjacencymatrix, i);
         }
     }
 
@@ -63,7 +63,7 @@ public class Main4 {
                 numVertices = 0;
                 // Creates the new graph
             } else if (tempString[0].compareTo("new") == 0) {
-                
+
             } else if (tempString[0].compareTo("--") == 0) {
                 // Adds the vertexes to the graph
             } else if (tempString[1].compareTo("vertex") == 0) {
@@ -121,18 +121,22 @@ public class Main4 {
 
 class BellmanFord {
     private int distances[];
+    private int path[];
     private int numberofvertices;
     final int MAX_VALUE = 999;
 
     public BellmanFord(int numberofvertices) {
         this.numberofvertices = numberofvertices;
         distances = new int[numberofvertices + 1];
+        path = new int[numberofvertices + 1];
     }
 
-    public void BellmanFordEvaluation(int source, int adjacencymatrix[][]) {
+    public void BellmanFordEvaluation(int source, int adjacencymatrix[][], int graphNum) {
         for (int node = 1; node <= numberofvertices; node++) {
             distances[node] = MAX_VALUE;
         }
+
+        Arrays.fill(path, -1);
 
         distances[source] = 0;
         for (int node = 1; node <= numberofvertices - 1; node++) {
@@ -140,9 +144,11 @@ class BellmanFord {
                 for (int destinationnode = 1; destinationnode <= numberofvertices; destinationnode++) {
                     if (adjacencymatrix[sourcenode][destinationnode] != MAX_VALUE) {
                         if (distances[destinationnode] > distances[sourcenode]
-                                + adjacencymatrix[sourcenode][destinationnode])
+                                + adjacencymatrix[sourcenode][destinationnode]) {
                             distances[destinationnode] = distances[sourcenode]
                                     + adjacencymatrix[sourcenode][destinationnode];
+                            path[destinationnode] = sourcenode;
+                        }
                     }
                 }
             }
@@ -158,9 +164,20 @@ class BellmanFord {
             }
         }
 
-        for (int vertex = 1; vertex <= numberofvertices; vertex++) {
-            System.out.println("distance of source  " + source + " to "
-                    + vertex + " is " + distances[vertex]);
+        System.out.println("Output for graph " + graphNum + ":");
+        for (int vertex = 2; vertex <= numberofvertices; vertex++) {
+            System.out.print(source + " --> " + vertex + " cost is " + distances[vertex] + "; path is ");
+            printPath(path, vertex);
+            System.out.println();
         }
+    }
+
+    void printPath(int[] path, int i) {
+        if (path[i] == -1) {
+            System.out.print(i);
+            return;
+        }
+        printPath(path, path[i]);
+        System.out.print(" --> " + i);
     }
 }
