@@ -3,7 +3,6 @@ import java.io.FileNotFoundException;
 import java.util.Scanner;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
 
 public class Main4 {
     private static Object adjacencymatrix;
@@ -14,7 +13,7 @@ public class Main4 {
         File graphs2 = new File("graphs2.txt");
         ArrayList<Integer> numVerticiesArray = fileToVerticesArray(graphs2);
 
-        
+        // Code for creating the array of edges used for SSSP
         int source = 1;
         int lineNumber = 0;
         ArrayList<int[][]> arrayOfMatrix = new ArrayList<int[][]>();
@@ -22,15 +21,19 @@ public class Main4 {
         for (int i = 0; i < numVerticiesArray.size(); i++) {
             int numberofvertices = numVerticiesArray.get(i);
 
+            // Calls the code that fills the matrix with the weights of the edges
             lineNumber = verticesToMatrix(graphs2, numberofvertices, arrayOfMatrix, lineNumber);
             lineNumber++;
         }
 
+        // Loops through the ArrayList so all the graphs are evaluated
         for (int i = 0; i < arrayOfMatrix.size(); i++) {
 
             int[][] adjacencymatrix = arrayOfMatrix.get(i);
             int numberofvertices = numVerticiesArray.get(i);
 
+            // Loops through the array and fills any value that is zero (except 
+            // for if the source and destination are the same) with the MAX_VALUE
             for (int sourcenode = 1; sourcenode <= numberofvertices; sourcenode++) {
                 for (int destinationnode = 1; destinationnode <= numberofvertices; destinationnode++) {
                     if (sourcenode == destinationnode) {
@@ -43,14 +46,17 @@ public class Main4 {
                 }
             }
 
+            // Performs the SSSP
             BellmanFord bellmanford = new BellmanFord(numberofvertices);
             bellmanford.BellmanFordEvaluation(source, adjacencymatrix, i);
         }
 
+        // Calls fractional knapsack function
         fractionalKnapsack();
 
     }
 
+    // Loops through the file and returns the number of vertices each graph has
     public static ArrayList<Integer> fileToVerticesArray(File file) throws FileNotFoundException {
         Scanner scan = new Scanner(file);
         int numVertices = 0;
@@ -83,6 +89,8 @@ public class Main4 {
         return numVerticesArray;
     }
 
+    // Takes the information in the file and fills out an array, then adds that array to an ArrayList 
+    // Uses line number so the same graph isn't put into the arrayList twice
     public static int verticesToMatrix(File file, int numVertices, ArrayList<int[][]> arrayOfMatrix, int lineNumber)
             throws FileNotFoundException {
         Scanner scan = new Scanner(file);
@@ -122,6 +130,8 @@ public class Main4 {
         return lineNumber;
     }
 
+    // Loops through the file and puts all the information about the spices into an ArrayList
+    // Returns the max weights each knapsack can hold
     public static ArrayList<Integer> fileToSpiceInfo(File file) throws FileNotFoundException {
         Scanner scan = new Scanner(file);
         ArrayList<Integer> knapsackWeights = new ArrayList<Integer>();
@@ -150,6 +160,7 @@ public class Main4 {
         return knapsackWeights;
     }
 
+    // Executes the fractional knapsack program with a greedy algorithm
     public static void fractionalKnapsack() throws FileNotFoundException{
         int i, j = 0, max_qty, m, n;
         float sum = 0, max;
@@ -162,6 +173,7 @@ public class Main4 {
         spice = spice.getSpiceByPosition(0);
         n = spice.getSpiceListSize();
 
+        // Fills an array with the value and weight of each spice
         for (int k = 1; k < n; k++) {
             array[0][k] = spice.getSpiceByPosition(k).getQuantity();
         }
@@ -169,6 +181,7 @@ public class Main4 {
             array[1][k] = (int) spice.getSpiceByPosition(k).getValue();
         }
 
+        // Creates a temporary array so that the original array isn't losing any information when the algorithm is ran
         for (int k = 0; k < knapsackWeights.size(); k++) {
             int[][] tempArray = new int[2][20];
             for (int p=0; p<array.length; p++){
@@ -185,6 +198,7 @@ public class Main4 {
             ArrayList<Integer> knapsackContents = new ArrayList<Integer>();
             ArrayList<Spice> spiceTracker = new ArrayList<Spice>();
 
+            // While the knapsack stil has room, it is filled with various amounts of spice
             while (m >= 0) {
                 max = 0;
                 for (i = 0; i < n; i++) {
@@ -206,6 +220,8 @@ public class Main4 {
                     tempArray[1][j] = 0;
                 }
             }
+
+            // Prints out the value and amount of each spice that fits in a knapsack of x capacity
             System.out.print("Knapsack of capacity " + knapsackWeights.get(k) + " is worth " + (int) sum +
                              " quatloos and contains ");
                              int l=0;
@@ -225,6 +241,7 @@ public class Main4 {
     }
 }
 
+// BellmanFord class for using SSSP
 class BellmanFord {
     private int distances[];
     private int path[];
@@ -237,6 +254,7 @@ class BellmanFord {
         path = new int[numberofvertices + 1];
     }
 
+    // Actually loops through an finds the shortest path
     public void BellmanFordEvaluation(int source, int adjacencymatrix[][], int graphNum) {
         for (int node = 1; node <= numberofvertices; node++) {
             distances[node] = MAX_VALUE;
@@ -260,6 +278,7 @@ class BellmanFord {
             }
         }
 
+        // Makes sure there is no negative edge cycle
         for (int sourcenode = 1; sourcenode <= numberofvertices; sourcenode++) {
             for (int destinationnode = 1; destinationnode <= numberofvertices; destinationnode++) {
                 if (adjacencymatrix[sourcenode][destinationnode] != MAX_VALUE) {
@@ -270,6 +289,7 @@ class BellmanFord {
             }
         }
 
+        // Prints out the value for the shortest path
         System.out.println("Output for graph " + graphNum + ":");
         for (int vertex = 2; vertex <= numberofvertices; vertex++) {
             System.out.print(source + " --> " + vertex + " cost is " + distances[vertex] + "; path is ");
@@ -278,6 +298,7 @@ class BellmanFord {
         }
     }
 
+    // Prints out the path taken to arrive at the smallest value
     void printPath(int[] path, int i) {
         if (path[i] == -1) {
             System.out.print(i);
@@ -288,6 +309,7 @@ class BellmanFord {
     }
 }
 
+// Class that contains the information for all the spices
 class Spice {
     private int quantity;
     private float value;
