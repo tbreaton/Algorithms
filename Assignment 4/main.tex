@@ -1,0 +1,93 @@
+\documentclass{article}
+\usepackage{graphicx} % Required for inserting images
+\usepackage{lineno}
+\usepackage[paperheight=11in, paperwidth=8in, top=10mm, bottom=20mm, left=20mm, right=20mm]{geometry}
+
+\title{Algorithms Assignment 4}
+\author{Thomas Breaton }
+\date{December 2023}
+
+\begin{document}
+
+\maketitle
+
+\section{Main Function}
+\begin{figure}[h]
+    \centering
+    \includegraphics[width = 15cm]{Assignment4_Main.png}
+    \caption{Image of main function}
+    \label{fig:mainFunction}
+\end{figure}
+\textbf{This section of code consists of what is being imported, constants, and the code that I want to run. The main function in this assignment calls for files to be scanned, the array for Bellman-Ford SSSP to be created and filled, the SSSP to be executed, and the fractional knapsack function to be called.}
+\newpage
+
+\section{File To Vertices Array}
+\begin{figure}[h]
+    \centering
+    \includegraphics[width = 15cm]{Assignment4_VerticesToArray.png}
+    \caption{Image of verticesToArray function}
+    \label{fig:verticesToArray}
+\end{figure}
+\textbf{This function reads the file graphs2 and keeps a count of how many vertices are in each graph. Then that number is added to an ArrayList which is returned and used to create the array for Bellman-Ford to be implemented.}
+\newpage
+
+\section{Vertices To Matrix}
+\begin{figure}[h]
+    \centering
+    \includegraphics[width = 15cm]{Assignment4_VerticesToMatrix.png}
+    \caption{Image of verticesToMatrix function}
+    \label{fig:verticesToMatrixFunction}
+\end{figure}
+\textbf{This function is takes the number of vertices and an ArrayList and reads the file graphs2 again. This time, the weights of the edges are put into the matrix. The function uses an int to track the line number so that graphs aren't added multiple times into the ArrayList.}
+\newpage
+
+\section{File To Spice Info}
+\begin{figure}[h]
+    \centering
+    \includegraphics[width = 15cm]{Assignment4_SpiceInfo.png}
+    \caption{Image of fileToSpiceInfo function}
+    \label{fig:fileToSpiceInfoFunction}
+\end{figure}
+\textbf{This function reads through the spice file and creates the spices using their name, value, and quantity. These spices are added to an ArrayList in the Spice class. This function also creates an ArrayList of the different max weights that a knapsack can hold.}
+\newpage
+
+\section{Fractional Knapsack}
+\begin{figure}[h]
+    \centering
+    \includegraphics[width = 15cm]{Assignment4_FractionalKnapsack.png}
+    \caption{Image of fractionalKnapsack function}
+    \label{fig:fractionalKnapsackFunction}
+\end{figure}
+\textbf{This section of code is what is used to determine how much of each spice can be taken in different knapsacks. The code creates an array that stores the weight and value of each spice and then loops through that array and finds the maximum value that can be taken while not going over the weight limit of the knapsack. The running time for this function is O(nlogn).}
+\newpage
+
+\section{Bellman-Ford SSSP}
+\begin{figure}[h]
+    \centering
+    \includegraphics[width = 15cm]{Assignment4_BellmanFord.png}
+    \caption{Image of BellmanFord Class}
+    \label{fig:BellmanFordClass}
+\end{figure}
+\textbf{This section of code contains the Bellman-Ford class that is used to implement SSSP. This class has an array for the distance from the source to the destination, an array for the path that is taken to get there, and an int to store how many vertices are in the graph. When the evaluation function is called, the matrix that was filled with the edge weights is looped through and each vertex that isn't at infinity, or in this case 999, and is larger than the edge weight, it is changed to the lower value. This is repeated for the number of vertices that are in the graph. Then the function loops through the graph again and check for a negative edge cycle. Finally, the function prints out the value of the shortest path and what that path actually is. The running time for this algorithm is O(V * E) so it depends on how many vertices and edges are in your graph.}
+\newpage
+
+\section{Spice Class}
+\begin{figure}[h]
+    \centering
+    \includegraphics[width = 15cm]{Assignment4_Spice.png}
+    \caption{Image of Spice Class}
+    \label{fig:spiceClass}
+\end{figure}
+\textbf{This section of code contains the Spice class. This class is used to store information about each of the spices like name, value, and weight. There are also get functions for easy access to the data. You can find spices by their name, or their position in the ArrayList of spices.}
+\newpage
+
+\section{Results}
+\begin{figure}[h]
+    \centering
+    \includegraphics[width = 15cm]{Assignment4_Results.png}
+    \caption{Image of results}
+    \label{fig:resuts}
+\end{figure}
+\textbf{These are the results of the Bellman-Ford SSSP and the fractional knapsack problem.}
+
+\end{document}
